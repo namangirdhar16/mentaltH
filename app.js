@@ -7,6 +7,7 @@ const http = require('http');
 const server = http.createServer(app);
 
 const io = require('socket.io')(server);
+const { addUser , removeUser } = require('./utils/users.js');
 
 app.use(express.static(__dirname + '/public'));
 
@@ -17,15 +18,17 @@ io.on('connection',(socket)=>{
     socket.broadcast.emit('message','a new user has joined - from the server!!');
     // socket.emit('message','Welcome - Admin');
 
-    socket.on('join',(room,callback)=>{
+    socket.on('join',({ username , room },callback)=>{
         socket.join(room);
         
         socket.emit('message','Welcome! - Admin');
-        socket.to(room).broadcast.emit('message',`A new user has joined! the room ${room}`);
+        socket.to(room).broadcast.emit('message',`${username} has joined! the room ${room}`);
         callback();
     })
     
     socket.on('disconnect',()=>{
+        
+        
         console.log('user has disconnected!');
         socket.broadcast.emit('message','a user has disconnected!');
         
