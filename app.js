@@ -19,7 +19,7 @@ io.on('connection',(socket)=>{
     socket.broadcast.emit('message','a new user has joined - from the server!!');
     // socket.emit('message','Welcome - Admin');
 
-    socket.on('join',({username,room},callback)=>{
+    socket.on('join',({username ,room },callback)=>{
         socket.join(room);
         addUser({username , room , id : socket.id });
         socket.emit('message','Welcome! - Admin');
@@ -29,13 +29,17 @@ io.on('connection',(socket)=>{
     
     socket.on('disconnect',()=>{
         console.log('user has disconnected!');
-        socket.broadcast.emit('message','a user has disconnected!');
+        const user = removeUser(socket.id);
+        socket.to(user.room).broadcast.emit('message','a user has disconnected!');
         
     })
 
     socket.on('message', (message) => {
         console.log('message is ',message);
-        io.emit('message',message);
+        const {user , error} = getUserBySocketId(socket.id);
+        if(error)
+        return console.log(err);
+        io.to(user.room).emit('message',message);
     })
 })
 
