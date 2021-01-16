@@ -13,9 +13,9 @@ const $messageList = document.getElementById('messages');
 
 
 // using queryString to get the room in form of its key and value pair
-const { username , room } = Qs.parse(location.search , {ignoreQueryPrefix:true});
+const { room } = Qs.parse(location.search , {ignoreQueryPrefix:true});
 
-console.log(username , room);
+console.log(room);
 
 //  when the form gets submit
 $form.addEventListener('submit',(e)=>{ 
@@ -39,7 +39,7 @@ socket.on('message',(message)=>{
 }) 
 
 
-socket.emit('join', {username , room} ,(err)=>{
+socket.emit('join', room ,(err)=>{
     if(err)
     return console.log('room name was not sent!',room)
     console.log('room name was sent! - from callback',room);
