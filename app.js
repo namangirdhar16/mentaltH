@@ -3,17 +3,23 @@ const express = require('express');
 const app = express();
 
 const http = require('http');
-const { Z_NEED_DICT } = require('zlib');
+
 const server = http.createServer(app);
 
 const io = require('socket.io')(server);
 
 app.use(express.static(__dirname + '/public'));
 
+
 io.on('connection',(socket)=>{
     console.log('a new user is connnected');
     socket.on('disconnect',()=>{
         console.log('user has disconnected!');
+    })
+
+    socket.on('message', (message) => {
+        console.log('message is ',message);
+        io.emit('message',message);
     })
 })
 
