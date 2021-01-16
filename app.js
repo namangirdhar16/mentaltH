@@ -12,9 +12,23 @@ app.use(express.static(__dirname + '/public'));
 
 
 io.on('connection',(socket)=>{
-    console.log('a new user is connnected');
+    console.log('a new user is connnected with id ', socket.id);
+
+    socket.broadcast.emit('message','a new user has joined - from the server!!');
+    // socket.emit('message','Welcome - Admin');
+
+    socket.on('join',(room,callback)=>{
+        socket.join(room);
+        
+        socket.emit('message','Welcome! - Admin');
+        socket.to(room).broadcast.emit('message',`A new user has joined! the room ${room}`);
+        callback();
+    })
+    
     socket.on('disconnect',()=>{
         console.log('user has disconnected!');
+        socket.broadcast.emit('message','a user has disconnected!');
+        
     })
 
     socket.on('message', (message) => {

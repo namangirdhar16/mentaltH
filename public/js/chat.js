@@ -1,6 +1,10 @@
-
-
+// client side javascript
 const socket = io();
+
+// socket.on('connect',() => {
+//     console.log(socket.id);
+// })
+
 
 //extracting DOM elements
 const $form = document.getElementById('form');
@@ -8,9 +12,12 @@ const $input = document.getElementById('input');
 const $messageList = document.getElementById('messages');
 
 
+// using queryString to get the room in form of its key and value pair
+const { room } = Qs.parse(location.search , {ignoreQueryPrefix:true});
 
+console.log(room);
 
-// adding event listener when the form gets submit
+//  when the form gets submit
 $form.addEventListener('submit',(e)=>{ 
 
     e.preventDefault();
@@ -30,3 +37,10 @@ socket.on('message',(message)=>{
     
     $messageList.appendChild(listElement);
 }) 
+
+
+socket.emit('join', room ,(err)=>{
+    if(err)
+    return console.log('room name was not sent!',room)
+    console.log('room name was sent! - from callback',room);
+})
