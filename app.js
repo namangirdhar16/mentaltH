@@ -21,6 +21,7 @@ io.on('connection',(socket)=>{
 
     socket.on('join',({username ,room },callback)=>{
         socket.join(room);
+        console.log(username,room);
         addUser({username , room , id : socket.id });
         socket.emit('message','Welcome! - Admin');
         socket.to(room).broadcast.emit('message',`A ${username} has joined! the room ${room}`);
@@ -37,8 +38,9 @@ io.on('connection',(socket)=>{
     socket.on('message', (message) => {
         console.log('message is ',message);
         const {user , error} = getUserBySocketId(socket.id);
+        console.log(user);
         if(error)
-        return console.log(err);
+        return console.log(error);
         io.to(user.room).emit('message',message);
     })
 })
@@ -63,3 +65,4 @@ server.listen(3000,()=>{
 
 
 
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       

@@ -39,7 +39,7 @@ socket.on('message',(message)=>{
 }) 
 
 
-socket.emit('join', room ,(err)=>{
+socket.emit('join', {username,room },(err)=>{
     if(err)
     return console.log('room name was not sent!',room)
     console.log('room name was sent! - from callback',room);
