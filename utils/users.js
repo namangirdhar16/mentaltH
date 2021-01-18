@@ -18,6 +18,7 @@ const addUser = ({username , room , id }) => {
     return user;
 }
 
+
 const removeUser = (id) => {
     
      const index = users.findIndex((user) => {
@@ -33,14 +34,15 @@ const getUserBySocketId = (id) => {
     
     const index = users.findIndex((user) => {
         return user.id === id;
+
     })
-    if(index === -1)
-    {
-        return {
-            error: 'no such user exist'
-        }
+    
+    if(index !== -1)
+    return users[index];
+    else 
+    return {
+        error : 'no such user exist',
     }
-    return user[index];
 }
 
 // const user = {
@@ -51,12 +53,14 @@ const getUserBySocketId = (id) => {
 // }
 
 
-// addUser(user);
-// addUser(user);
-// console.log(users);
-// console.log(removeUser('1'));
-console.log(users);
+
+const generateMessage = ({ message , user}) => {
+      
+      return {
+          message, ...user
+      }
+};
 
 module.exports = {
-    addUser , removeUser , getUserBySocketId
+    addUser , removeUser , getUserBySocketId , generateMessage
 }
